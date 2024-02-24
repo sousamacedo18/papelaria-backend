@@ -49,7 +49,7 @@ router.post("/",(req,res,next)=>{
 router.put("/",(req,res,next)=>{
     const id = req.body.id;
   
-      res.send({id:id});
+      res.status(404).send({id:id});
   
   });
   router.delete("/:id",(req,res,next)=>{
