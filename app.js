@@ -5,11 +5,11 @@ const cors = require("cors");
 app.use(cors());
 const morgan = require("morgan");
 app.use(morgan("dev"));
-
-
-const rotaUsuarios = require("./routes/rotaUsuario");
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}))
+
+const rotaUsuarios = require("./routes/rotaUsuario");
+
 
 app.use((req,res,next)=>{
     res.header("Access-Control-Allow-Origin","*");
