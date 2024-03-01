@@ -28,6 +28,22 @@ const usuario = [
         senha:"123",   
     }
 ]
+router.get("/:id",(req,res,next)=>{
+    const {id} = req.params;
+    db.all('SELECT * FROM usuario WHERE id=?',[id],(error,rows)=>{
+        if(error){
+            return res.status(500).send({
+                error:error.message
+            });
+        }
+     
+        res.status(200).send({
+            mensagem:"Aqui está a lista de Usuários",
+            usuario:rows
+        })
+    })
+  
+})
 router.get("/",(req,res,next)=>{
     db.all("SELECT * FROM usuario",(error,rows)=>{
         if(error){
@@ -78,9 +94,21 @@ router.post("/",(req,res,next)=>{
 
 });
 router.put("/",(req,res,next)=>{
-    const id = req.body.id;
-  
-      res.status(404).send({id:id});
+    const {id,nome,email,senha} = req.body;
+    db.run("UPDATE usuario SET nome=?,email=?,senha=? WHERE id=?",
+    [nome,email,senha,id],function(error){
+        if(error){
+            return res.status(500).send({
+                error:error.message
+            });
+        }
+        res.status(200).send({
+            mensagem:"Cadastro Alterado com Sucesso!",
+           
+        })  
+    })
+    
+    
   
   });
   router.delete("/:id",(req,res,next)=>{
