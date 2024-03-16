@@ -9,6 +9,10 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}))
 
 const rotaUsuarios = require("./routes/rotaUsuario");
+const rotaProdutos = require("./routes/rotaProduto");
+const rotaEntradas = require("./routes/rotaEntrada");
+const rotaEstoques = require("./routes/rotaEstoque");
+const rotaSaidas = require("./routes/rotaSaida");
 
 
 app.use((req,res,next)=>{
@@ -28,6 +32,11 @@ app.use((req,res,next)=>{
 
 
 app.use("/usuario",rotaUsuarios);
+app.use("/produto",rotaProdutos);
+app.use("/entrada",rotaEntradas);
+app.use("/estoque",rotaEstoques);
+app.use("/saida",rotaSaidas);
+
 
 
 
