@@ -31,7 +31,15 @@ router.get("/:id", (req, res, next) => {
 
 // Lista todas as saídas do banco de dados
 router.get("/", (req, res, next) => {
-    db.all('SELECT * FROM saida INNER JOIN produto on saida.id_produto = produto.id', (error, rows) => {
+    db.all(`SELECT 
+                    saida.id as id, 
+                    saida.id_produto as id_produto,
+                    saida.quantidade as quantidade,
+                    saida.data_saida as data_saida,
+                    produto.descricao as descricao,
+                    saida.valor_unitario as valor_unitario
+             FROM saida 
+             INNER JOIN produto on saida.id_produto = produto.id`, (error, rows) => {
         if (error) {
             return res.status(500).send({
                 error: error.message

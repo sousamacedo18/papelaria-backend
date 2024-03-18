@@ -31,7 +31,14 @@ router.get("/:id", (req, res, next) => {
 
 // Lista todas as entradas do banco de dados
 router.get("/", (req, res, next) => {
-    db.all(`SELECT * FROM entrada 
+    db.all(`SELECT 
+            entrada.id as id, 
+            entrada.id_produto as id_produto,
+            entrada.quantidade as quantidade,
+            entrada.data_entrada as data_entrada,
+            produto.descricao as descricao,
+            entrada.valor_unitario as valor_unitario
+            FROM entrada 
             INNER JOIN produto 
             ON entrada.id_produto = produto.id`, (error, rows) => {
         if (error) {
