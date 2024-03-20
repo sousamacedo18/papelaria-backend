@@ -87,7 +87,31 @@ router.delete("/:id", (req, res, next) => {
         });
     });
 });
-
+function atualizarestoque(id_produto,quantidade,valor_unitario){
+    db.all('SELECT * FROM estoque WHERE id_produto=?',[id_produto], (error, rows) => {
+        if (error) {
+            return false;
+        }
+        if(rows.length>0){
+            let qtde = rows[0].quantidade;
+            qtde=parseFloat(qtde)+parseFloat(quantidade);
+            db.run("UPDATE estoque SET quantidade=?, valor_unitario=? WHERE id_produto=?",
+            [qtde, valor_unitario, id_produto], (error) => {
+                if (error) {
+                   return false
+                }
+            });
+  
+        }else{
+            db.serialize(() => {
+                const insertEstoque = db.prepare("INSERT INTO estoque(id_produto, quantidade, valor_unitario) VALUES(?,?,?)");
+                insertEstoque.run(id_produto, quantidade, valor_unitario);
+                insertEstoque.finalize();
+            });
+        }
+    });
+    return true;
+}
 // Rota para salvar uma nova entrada
 router.post("/", (req, res, next) => {
     const { id_produto, quantidade, valor_unitario, data_entrada } = req.body;
@@ -97,7 +121,7 @@ router.post("/", (req, res, next) => {
         insertEntrada.run(id_produto, quantidade, valor_unitario, data_entrada);
         insertEntrada.finalize();
     });
-
+    atualizarestoque(id_produto,quantidade,valor_unitario)
     process.on("SIGINT", () => {
         db.close((err) => {
             if (err) {

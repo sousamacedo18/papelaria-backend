@@ -31,7 +31,15 @@ router.get("/:id", (req, res, next) => {
 
 // Lista todo o estoque do banco de dados
 router.get("/", (req, res, next) => {
-    db.all('SELECT * FROM estoque', (error, rows) => {
+    db.all(`SELECT 
+    estoque.id as id, 
+    estoque.id_produto as id_produto,
+    estoque.quantidade as quantidade,
+    produto.descricao as descricao,
+    estoque.valor_unitario as valor_unitario
+    FROM estoque 
+    INNER JOIN produto 
+    ON estoque.id_produto = produto.id`, (error, rows) => {
         if (error) {
             return res.status(500).send({
                 error: error.message
@@ -40,7 +48,7 @@ router.get("/", (req, res, next) => {
 
         res.status(200).send({
             mensagem: "Aqui está a lista de todo o Estoque",
-            estoque: rows
+            estoques: rows
         });
     });
 });
